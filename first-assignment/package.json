@@ -1,0 +1,30 @@
+{
+  "name": "first-assignment",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "case:one": "tsx src/case-one.ts",
+    "case:two": "tsx src/case-two.ts",
+    "case:three": "tsx src/case-three.ts"
+  },
+  "dependencies": {
+    "@anvia/core": "^0.8.0",
+    "@anvia/openai": "^0.3.14",
+    "@tavily/core": "^0.7.6",
+    "dotenv": "^17.4.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.1",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.9.0",
+      "onFail": "download"
+    }
+  }
+}
