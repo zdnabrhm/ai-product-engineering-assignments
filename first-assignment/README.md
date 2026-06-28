@@ -1,4 +1,4 @@
-# AI Product Engineering First Assignment
+# First Assignment
 
 ## Cases
 
