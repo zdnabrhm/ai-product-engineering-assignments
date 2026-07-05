@@ -1,0 +1,42 @@
+{
+  "name": "second-assignment",
+  "type": "module",
+  "scripts": {
+    "dev": "dotenvx run -- tsx watch src/index.ts",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt --check",
+    "fmt:fix": "oxfmt",
+    "fix": "pnpm lint:fix && pnpm fmt:fix",
+    "check": "pnpm lint && pnpm fmt && pnpm build",
+    "build": "tsc",
+    "start": "dotenvx run -- node dist/index.js"
+  },
+  "dependencies": {
+    "@anvia/core": "^0.12.3",
+    "@anvia/openai": "^0.3.16",
+    "@dotenvx/dotenvx": "^2.1.4",
+    "@hono/node-server": "^2.0.8",
+    "@hono/zod-validator": "^0.8.0",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "@t3-oss/env-core": "^0.13.11",
+    "bullmq": "^5.79.2",
+    "hono": "^4.12.27",
+    "ioredis": "^5.11.1",
+    "pg": "^8.22.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "@types/pg": "^8.20.0",
+    "oxfmt": "^0.57.0",
+    "oxlint": "^1.72.0",
+    "prisma": "^7.8.0",
+    "tsx": "^4.23.0",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build and generated files
+dist/
+coverage/
+*.tsbuildinfo
+src/generated/prisma/
+
+# Environment variables
+.env*
+!.env.example
+
+# Logs and caches
+*.log
+logs/
+.lexa/
+
+# Editors and OS files
+.idea/
+.vscode/
+.DS_Store
