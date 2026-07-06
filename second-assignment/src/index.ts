@@ -1,40 +1,30 @@
 import { serve } from "@hono/node-server";
-import { Hono } from "hono";
+import { app } from "./app.js";
+import { logger } from "./lib/logger.js";
 import { env } from "./utils/env.js";
-import type { PrismaClient } from "./generated/prisma/client.js";
-
-type ContextWithPrisma = {
-  Variables: {
-    prisma: PrismaClient;
-  };
-};
-
-const app = new Hono<ContextWithPrisma>();
-
-app.get("/", (c) => {
-  return c.text("Hello Hono!");
-});
 
 const server = serve(
   {
     fetch: app.fetch,
-    port: env.PORT || 3000,
+    port: env.PORT,
   },
   (info) => {
-    console.log(`Server is running on http://localhost:${info.port}`);
+    logger.info({ component: "server", port: info.port }, "server started");
   },
 );
 
 // Graceful shutdown
 process.on("SIGINT", () => {
+  logger.info({ component: "server", signal: "SIGINT" }, "server shutting down");
   server.close();
   process.exit(0);
 });
 
 process.on("SIGTERM", () => {
+  logger.info({ component: "server", signal: "SIGTERM" }, "server shutting down");
   server.close((err) => {
     if (err) {
-      console.error(err);
+      logger.error({ err, component: "server" }, "server shutdown failed");
       process.exit(1);
     }
     process.exit(0);

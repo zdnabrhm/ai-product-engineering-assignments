@@ -6,3 +6,24 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum PlanStatus {
+  QUEUED
+  PROCESSING
+  DONE
+  FAILED
+}
+
+model WorkoutPlan {
+  id           String     @id @default(cuid())
+  input        Json
+  status       PlanStatus @default(QUEUED)
+  result       Json?
+  pdfPath      String?
+  errorMessage String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}

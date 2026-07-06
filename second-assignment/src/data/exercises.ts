@@ -1,0 +1,208 @@
+export type ExperienceLevel = "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
+
+export interface Exercise {
+  id: string;
+  name: string;
+  primaryMuscle: string;
+  equipment: string[];
+  minExperienceLevel: ExperienceLevel;
+}
+
+export const exercises: Exercise[] = [
+  {
+    id: "bodyweight-squat",
+    name: "Bodyweight Squat",
+    primaryMuscle: "quadriceps",
+    equipment: ["bodyweight"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "push-up",
+    name: "Push-up",
+    primaryMuscle: "chest",
+    equipment: ["bodyweight"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "glute-bridge",
+    name: "Glute Bridge",
+    primaryMuscle: "glutes",
+    equipment: ["bodyweight"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "reverse-lunge",
+    name: "Reverse Lunge",
+    primaryMuscle: "quadriceps",
+    equipment: ["bodyweight"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "plank",
+    name: "Plank",
+    primaryMuscle: "core",
+    equipment: ["bodyweight"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "mountain-climber",
+    name: "Mountain Climber",
+    primaryMuscle: "core",
+    equipment: ["bodyweight"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "dumbbell-goblet-squat",
+    name: "Dumbbell Goblet Squat",
+    primaryMuscle: "quadriceps",
+    equipment: ["dumbbell"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "dumbbell-bench-press",
+    name: "Dumbbell Bench Press",
+    primaryMuscle: "chest",
+    equipment: ["dumbbell", "bench"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "one-arm-dumbbell-row",
+    name: "One-arm Dumbbell Row",
+    primaryMuscle: "back",
+    equipment: ["dumbbell", "bench"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "dumbbell-romanian-deadlift",
+    name: "Dumbbell Romanian Deadlift",
+    primaryMuscle: "hamstrings",
+    equipment: ["dumbbell"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "dumbbell-shoulder-press",
+    name: "Dumbbell Shoulder Press",
+    primaryMuscle: "shoulders",
+    equipment: ["dumbbell"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "dumbbell-biceps-curl",
+    name: "Dumbbell Biceps Curl",
+    primaryMuscle: "biceps",
+    equipment: ["dumbbell"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "barbell-back-squat",
+    name: "Barbell Back Squat",
+    primaryMuscle: "quadriceps",
+    equipment: ["barbell", "rack"],
+    minExperienceLevel: "INTERMEDIATE",
+  },
+  {
+    id: "barbell-bench-press",
+    name: "Barbell Bench Press",
+    primaryMuscle: "chest",
+    equipment: ["barbell", "bench", "rack"],
+    minExperienceLevel: "INTERMEDIATE",
+  },
+  {
+    id: "barbell-deadlift",
+    name: "Barbell Deadlift",
+    primaryMuscle: "hamstrings",
+    equipment: ["barbell"],
+    minExperienceLevel: "INTERMEDIATE",
+  },
+  {
+    id: "barbell-row",
+    name: "Barbell Row",
+    primaryMuscle: "back",
+    equipment: ["barbell"],
+    minExperienceLevel: "INTERMEDIATE",
+  },
+  {
+    id: "overhead-press",
+    name: "Barbell Overhead Press",
+    primaryMuscle: "shoulders",
+    equipment: ["barbell", "rack"],
+    minExperienceLevel: "INTERMEDIATE",
+  },
+  {
+    id: "pull-up",
+    name: "Pull-up",
+    primaryMuscle: "back",
+    equipment: ["pull-up bar"],
+    minExperienceLevel: "INTERMEDIATE",
+  },
+  {
+    id: "lat-pulldown",
+    name: "Lat Pulldown",
+    primaryMuscle: "back",
+    equipment: ["cable machine"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "seated-cable-row",
+    name: "Seated Cable Row",
+    primaryMuscle: "back",
+    equipment: ["cable machine"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "leg-press",
+    name: "Leg Press",
+    primaryMuscle: "quadriceps",
+    equipment: ["leg press machine"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "leg-curl",
+    name: "Leg Curl",
+    primaryMuscle: "hamstrings",
+    equipment: ["leg curl machine"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "chest-press-machine",
+    name: "Chest Press Machine",
+    primaryMuscle: "chest",
+    equipment: ["chest press machine"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "cable-face-pull",
+    name: "Cable Face Pull",
+    primaryMuscle: "rear delts",
+    equipment: ["cable machine"],
+    minExperienceLevel: "BEGINNER",
+  },
+  {
+    id: "bulgarian-split-squat",
+    name: "Bulgarian Split Squat",
+    primaryMuscle: "quadriceps",
+    equipment: ["dumbbell", "bench"],
+    minExperienceLevel: "INTERMEDIATE",
+  },
+  {
+    id: "barbell-front-squat",
+    name: "Barbell Front Squat",
+    primaryMuscle: "quadriceps",
+    equipment: ["barbell", "rack"],
+    minExperienceLevel: "ADVANCED",
+  },
+  {
+    id: "weighted-pull-up",
+    name: "Weighted Pull-up",
+    primaryMuscle: "back",
+    equipment: ["pull-up bar", "weight belt"],
+    minExperienceLevel: "ADVANCED",
+  },
+  {
+    id: "barbell-hip-thrust",
+    name: "Barbell Hip Thrust",
+    primaryMuscle: "glutes",
+    equipment: ["barbell", "bench"],
+    minExperienceLevel: "INTERMEDIATE",
+  },
+];
