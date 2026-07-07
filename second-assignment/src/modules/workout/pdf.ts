@@ -1,12 +1,20 @@
 import { mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 import pdfmake from "pdfmake";
-import type { Content, TableCell } from "pdfmake";
+import type { Content } from "pdfmake";
 import { exercises } from "../../data/exercises.js";
 import type { CreateWorkoutPlanInput, WorkoutPlan } from "./schema.js";
 
 const exerciseNames = new Map(exercises.map((exercise) => [exercise.id, exercise.name]));
 type DocumentDefinition = Parameters<typeof pdfmake.createPdf>[0];
+
+const ACCENT = "#800020";
+const ACCENT_LIGHT = "#fce9ec";
+const TEXT_DARK = "#111827";
+const TEXT_MEDIUM = "#4b5563";
+const TEXT_LIGHT = "#6b7280";
+const BORDER = "#e5e7eb";
+const WHITE = "#ffffff";
 
 pdfmake.addFonts({
   Helvetica: {
@@ -34,44 +42,90 @@ function formatLabel(value: string): string {
 }
 
 function listItems(items: string[]): Content[] {
-  return items.map((text) => ({ text }));
+  return items.map((text) => ({ text, margin: [0, 2, 0, 2] }));
+}
+
+function headerBar(): Content {
+  return {
+    canvas: [
+      {
+        type: "rect",
+        x: 0,
+        y: 0,
+        w: 515,
+        h: 4,
+        color: ACCENT,
+      },
+    ],
+    margin: [0, 0, 0, 24],
+  };
+}
+
+function sectionDivider(): Content {
+  return {
+    canvas: [
+      {
+        type: "line",
+        x1: 0,
+        y1: 0,
+        x2: 515,
+        y2: 0,
+        lineWidth: 1,
+        lineColor: BORDER,
+      },
+    ],
+    margin: [0, 4, 0, 12],
+  };
 }
 
 function profileTable(input: CreateWorkoutPlanInput): Content {
+  const labels = [
+    { label: "Goal", value: formatLabel(input.goal) },
+    { label: "Experience", value: formatLabel(input.experienceLevel) },
+    { label: "Training days", value: `${input.daysPerWeek} days per week` },
+    { label: "Session duration", value: `${input.sessionDurationMinutes} minutes` },
+    { label: "Equipment", value: input.availableEquipment.join(", ") },
+    { label: "Limitations", value: input.limitations ?? "None provided" },
+    { label: "Preferences", value: input.preferences ?? "None provided" },
+  ];
+
   return {
-    layout: "lightHorizontalLines",
+    layout: "noBorders",
     table: {
       widths: ["auto", "*"],
-      body: [
-        ["Goal", formatLabel(input.goal)],
-        ["Experience", formatLabel(input.experienceLevel)],
-        ["Training days", `${input.daysPerWeek} days per week`],
-        ["Session duration", `${input.sessionDurationMinutes} minutes`],
-        ["Equipment", input.availableEquipment.join(", ")],
-        ["Limitations", input.limitations ?? "None provided"],
-        ["Preferences", input.preferences ?? "None provided"],
-      ],
+      body: labels.map((row) => [
+        { text: row.label, color: TEXT_MEDIUM, fontSize: 9.5, noWrap: true },
+        { text: row.value, fontSize: 9.5 },
+      ]),
     },
     margin: [0, 0, 0, 16],
   };
 }
 
 function weeklyOverview(plan: WorkoutPlan): Content {
-  const rows: TableCell[][] = [
-    [
-      { text: "Day", style: "tableHeader" },
-      { text: "Type", style: "tableHeader" },
-      { text: "Focus", style: "tableHeader" },
-    ],
+  const header: Content[] = [
+    { text: "Day", color: WHITE, bold: true, fillColor: ACCENT, alignment: "center" as const },
+    { text: "Type", color: WHITE, bold: true, fillColor: ACCENT, alignment: "center" as const },
+    { text: "Focus", color: WHITE, bold: true, fillColor: ACCENT },
+  ];
+  const rows: Content[][] = [
+    header,
     ...plan.days.map((day) => [
-      `Day ${day.dayNumber}`,
-      day.type === "TRAINING" ? "Training" : "Rest",
+      { text: `Day ${day.dayNumber}`, alignment: "center" as const },
+      { text: day.type === "TRAINING" ? "Training" : "Rest", alignment: "center" as const },
       day.focus ?? "Recovery",
     ]),
   ];
 
   return {
-    layout: "lightHorizontalLines",
+    layout: {
+      hLineWidth: () => 0,
+      vLineWidth: () => 0,
+      paddingLeft: () => 8,
+      paddingRight: () => 8,
+      paddingTop: () => 6,
+      paddingBottom: () => 6,
+    },
     table: {
       headerRows: 1,
       widths: ["auto", "auto", "*"],
@@ -84,40 +138,80 @@ function weeklyOverview(plan: WorkoutPlan): Content {
 function workoutDays(plan: WorkoutPlan): Content[] {
   return plan.days.flatMap((day): Content[] => {
     const heading: Content = {
-      text: `Day ${day.dayNumber} — ${day.focus ?? "Rest & Recovery"}`,
-      style: "sectionHeading",
+      stack: [
+        {
+          canvas: [
+            {
+              type: "rect",
+              x: 0,
+              y: 0,
+              w: 515,
+              h: 28,
+              color: ACCENT_LIGHT,
+            },
+          ],
+          margin: [0, 0, 0, -28],
+        },
+        {
+          text: `Day ${day.dayNumber} — ${day.focus ?? "Rest & Recovery"}`,
+          margin: [12, 6, 0, 6],
+          fontSize: 13,
+          bold: true,
+          color: ACCENT,
+        },
+      ],
       pageBreak: day.dayNumber > 1 ? "before" : undefined,
+      margin: [0, 0, 0, 8],
     };
 
     if (day.type === "REST") {
-      return [heading, { text: day.dayNotes, margin: [0, 0, 0, 12] }];
+      return [heading, { text: day.dayNotes, margin: [0, 0, 0, 12], color: TEXT_MEDIUM }];
     }
 
-    const rows: TableCell[][] = [
+    const rows: Content[][] = [
       [
-        { text: "Exercise", style: "tableHeader" },
-        { text: "Sets", style: "tableHeader" },
-        { text: "Prescription", style: "tableHeader" },
-        { text: "Rest", style: "tableHeader" },
+        { text: "Exercise", color: WHITE, bold: true, fillColor: ACCENT },
+        { text: "Sets", color: WHITE, bold: true, fillColor: ACCENT, alignment: "center" as const },
+        {
+          text: "Prescription",
+          color: WHITE,
+          bold: true,
+          fillColor: ACCENT,
+          alignment: "center" as const,
+        },
+        { text: "Rest", color: WHITE, bold: true, fillColor: ACCENT, alignment: "center" as const },
       ],
       ...day.exercises.map((exercise) => [
         {
           stack: [
-            exerciseNames.get(exercise.exerciseId) ?? exercise.exerciseId,
-            ...(exercise.notes ? [{ text: exercise.notes, style: "tableNote" } as Content] : []),
+            {
+              text: exerciseNames.get(exercise.exerciseId) ?? exercise.exerciseId,
+              bold: true,
+              color: TEXT_DARK,
+            },
+            ...(exercise.notes
+              ? [{ text: exercise.notes, color: TEXT_LIGHT, fontSize: 8, italics: true }]
+              : []),
           ],
         },
-        exercise.sets.toString(),
-        exercise.prescription,
-        `${exercise.restSeconds}s`,
+        { text: exercise.sets.toString(), alignment: "center" as const },
+        { text: exercise.prescription, alignment: "center" as const },
+        { text: `${exercise.restSeconds}s`, alignment: "center" as const },
       ]),
     ];
 
     return [
       heading,
-      { text: day.dayNotes, margin: [0, 0, 0, 10] },
+      { text: day.dayNotes, margin: [0, 0, 0, 10], color: TEXT_MEDIUM },
       {
-        layout: "lightHorizontalLines",
+        layout: {
+          hLineWidth: () => 0,
+          vLineWidth: () => 0,
+          paddingLeft: () => 8,
+          paddingRight: () => 8,
+          paddingTop: () => 6,
+          paddingBottom: () => 6,
+        },
         table: {
           headerRows: 1,
           widths: ["*", "auto", "auto", "auto"],
@@ -139,12 +233,12 @@ export async function writeWorkoutPlanPdf(params: {
 
   const document: DocumentDefinition = {
     pageSize: "A4",
-    pageMargins: [48, 56, 48, 56],
+    pageMargins: [48, 40, 48, 56],
     defaultStyle: {
       font: "Helvetica",
       fontSize: 10,
-      lineHeight: 1.25,
-      color: "#1f2937",
+      lineHeight: 1.35,
+      color: TEXT_DARK,
     },
     info: {
       title: plan.title,
@@ -154,61 +248,63 @@ export async function writeWorkoutPlanPdf(params: {
     footer: (currentPage, pageCount) => ({
       text: `${currentPage} / ${pageCount}`,
       alignment: "center",
-      color: "#6b7280",
+      color: TEXT_LIGHT,
       fontSize: 8,
       margin: [0, 16, 0, 0],
     }),
     styles: {
       title: {
-        fontSize: 24,
+        fontSize: 26,
         bold: true,
-        color: "#111827",
-        margin: [0, 0, 0, 8],
+        color: ACCENT,
+        margin: [0, 0, 0, 4],
       },
       subtitle: {
         fontSize: 11,
-        color: "#4b5563",
+        color: TEXT_MEDIUM,
         margin: [0, 0, 0, 20],
       },
       sectionHeading: {
-        fontSize: 15,
+        fontSize: 14,
         bold: true,
-        color: "#111827",
-        margin: [0, 14, 0, 8],
-      },
-      tableHeader: {
-        bold: true,
-        color: "#111827",
-        fillColor: "#e5e7eb",
+        color: ACCENT,
+        margin: [0, 20, 0, 8],
       },
       tableNote: {
         fontSize: 8,
         italics: true,
-        color: "#6b7280",
+        color: TEXT_LIGHT,
       },
       disclaimer: {
         fontSize: 8,
-        color: "#6b7280",
+        color: TEXT_LIGHT,
         margin: [0, 16, 0, 0],
       },
     },
     content: [
+      headerBar(),
       { text: plan.title, style: "title" },
       {
         text: "Personalized one-week workout plan",
         style: "subtitle",
       },
       { text: "Your Profile", style: "sectionHeading" },
+      sectionDivider(),
       profileTable(input),
       { text: "Training Strategy", style: "sectionHeading" },
-      { text: plan.strategySummary, margin: [0, 0, 0, 16] },
+      sectionDivider(),
+      { text: plan.strategySummary, margin: [0, 0, 0, 16], color: TEXT_MEDIUM, lineHeight: 1.5 },
       { text: "Weekly Overview", style: "sectionHeading" },
+      sectionDivider(),
       weeklyOverview(plan),
       { text: "Daily Plan", style: "sectionHeading" },
+      sectionDivider(),
       ...workoutDays(plan),
       { text: "Recovery Notes", style: "sectionHeading", pageBreak: "before" },
+      sectionDivider(),
       { ul: listItems(plan.recoveryNotes) },
       { text: "General Notes", style: "sectionHeading" },
+      sectionDivider(),
       { ul: listItems(plan.generalNotes) },
       {
         text:
