@@ -33,6 +33,10 @@ function formatLabel(value: string): string {
     .join(" ");
 }
 
+function listItems(items: string[]): Content[] {
+  return items.map((text) => ({ text }));
+}
+
 function profileTable(input: CreateWorkoutPlanInput): Content {
   return {
     layout: "lightHorizontalLines",
@@ -203,9 +207,9 @@ export async function writeWorkoutPlanPdf(params: {
       { text: "Daily Plan", style: "sectionHeading" },
       ...workoutDays(plan),
       { text: "Recovery Notes", style: "sectionHeading", pageBreak: "before" },
-      { ul: plan.recoveryNotes },
+      { ul: listItems(plan.recoveryNotes) },
       { text: "General Notes", style: "sectionHeading" },
-      { ul: plan.generalNotes },
+      { ul: listItems(plan.generalNotes) },
       {
         text:
           "Disclaimer: This plan is for general educational purposes and is not medical advice. " +
