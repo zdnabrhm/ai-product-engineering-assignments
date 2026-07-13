@@ -1,0 +1,28 @@
+{
+  "name": "api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "dotenv -e ../../.env -- tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "dotenv -e ../../.env -- node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anvia/core": "^0.13.0",
+    "@anvia/openai": "^0.3.17",
+    "@anvia/server": "^0.5.6",
+    "@hono/node-server": "^2.0.8",
+    "@hono/zod-validator": "^0.8.0",
+    "@t3-oss/env-core": "^0.13.11",
+    "@third-assignment/db": "workspace:*",
+    "@third-assignment/queue": "workspace:*",
+    "hono": "^4.12.29",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsx": "^4.23.0",
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "third-assignment",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "format": "oxfmt --check",
+    "format:fix": "oxfmt .",
+    "typecheck": "turbo run typecheck"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^11.0.0",
+    "oxfmt": "^0.58.0",
+    "oxlint": "^1.73.0",
+    "turbo": "^2.10.4",
+    "typescript": "~7.0.2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@11.11.0"
+}

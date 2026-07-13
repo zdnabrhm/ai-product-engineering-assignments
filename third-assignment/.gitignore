@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.yarn/*
+!.yarn/releases/
+!.yarn/releases/**
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+
+# Environment files
+.env*
+!.env.example
+*.local
+
+# Build output and generated files
+dist/
+dist-ssr/
+.output/
+.nitro/
+.tanstack/
+.turbo/
+.vinxi/
+.wrangler/
+__unconfig*/
+apps/web/src/routeTree.gen.ts
+*.tsbuildinfo
+coverage/
+todos.json
+packages/db/generated/prisma/
+
+# Editor and OS files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/*.code-snippets
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.lexa/
