@@ -4,11 +4,21 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/schema.ts",
-    "./connection": "./src/connection.ts",
-    "./queue": "./src/queue.ts"
+    ".": {
+      "types": "./src/schema.ts",
+      "import": "./dist/schema.js"
+    },
+    "./connection": {
+      "types": "./src/connection.ts",
+      "import": "./dist/connection.js"
+    },
+    "./queue": {
+      "types": "./src/queue.ts",
+      "import": "./dist/queue.js"
+    }
   },
   "scripts": {
+    "build": "tsc",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

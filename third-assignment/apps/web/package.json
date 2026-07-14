@@ -17,6 +17,7 @@
     "@tabler/icons-react": "^3.44.0",
     "@tailwindcss/vite": "^4.3.2",
     "@tanstack/react-devtools": "latest",
+    "@tanstack/react-form": "^1.33.2",
     "@tanstack/react-router": "latest",
     "@tanstack/react-router-devtools": "latest",
     "@tanstack/router-plugin": "^1.168.19",
