@@ -33,7 +33,7 @@ apps/web/src/routeTree.gen.ts
 *.tsbuildinfo
 coverage/
 todos.json
-packages/db/generated/prisma/
+packages/db/src/generated/prisma/
 
 # Editor and OS files
 .idea/
