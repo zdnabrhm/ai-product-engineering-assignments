@@ -24,22 +24,3 @@ worker.on("failed", (job, error) => {
 worker.on("error", (error) => {
   console.log("Worker error:", error);
 });
-
-let isShuttingDown = false;
-
-async function shutdown() {
-  if (isShuttingDown) return;
-
-  isShuttingDown = true;
-  console.log("Worker shutting down...");
-
-  try {
-    await worker.close();
-  } catch (error) {
-    console.error("Failed to close worker:", error);
-    process.exitCode = 1;
-  }
-}
-
-process.once("SIGINT", () => void shutdown());
-process.once("SIGTERM", () => void shutdown());
