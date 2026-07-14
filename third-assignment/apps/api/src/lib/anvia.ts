@@ -6,6 +6,4 @@ const openaiClient = new OpenAIClient({
   baseUrl: env.OPENAI_BASE_URL,
 });
 
-export function getModel() {
-  return openaiClient.completionModel(env.OPENAI_MODEL);
-}
+export const model = openaiClient.completionModel(env.OPENAI_MODEL);

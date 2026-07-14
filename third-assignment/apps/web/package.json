@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@third-assignment/web",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@anvia/react": "^0.8.7",
+    "@anvia/react": "^0.8.8",
     "@t3-oss/env-core": "^0.13.11",
     "@tabler/icons-react": "^3.44.0",
     "@tailwindcss/vite": "^4.3.2",
@@ -20,7 +20,9 @@
     "@tanstack/react-router": "latest",
     "@tanstack/react-router-devtools": "latest",
     "@tanstack/router-plugin": "^1.168.19",
+    "@third-assignment/api": "workspace:*",
     "@third-assignment/ui": "workspace:*",
+    "hono": "^4.12.30",
     "lucide-react": "^1.24.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

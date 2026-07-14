@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@third-assignment/api",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,20 +9,20 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@anvia/core": "^0.13.0",
-    "@anvia/openai": "^0.3.17",
-    "@anvia/server": "^0.5.6",
+    "@anvia/core": "^0.13.1",
+    "@anvia/openai": "^0.3.18",
+    "@anvia/server": "^0.5.7",
     "@hono/node-server": "^2.0.8",
     "@hono/zod-validator": "^0.8.0",
     "@t3-oss/env-core": "^0.13.11",
     "@third-assignment/db": "workspace:*",
     "@third-assignment/queue": "workspace:*",
-    "hono": "^4.12.29",
+    "hono": "^4.12.30",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
-    "tsx": "^4.23.0",
+    "tsx": "^4.23.1",
     "typescript": "^7.0.2"
   }
 }
