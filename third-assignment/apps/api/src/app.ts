@@ -3,7 +3,7 @@ import { HTTPException } from "hono/http-exception";
 import { env } from "./env.js";
 import { cors } from "hono/cors";
 import { chatRoute } from "./modules/chat/route.js";
-import { writingProjectRoute } from "./modules/writing/route.js";
+import { roadmapRoute } from "./modules/roadmap/route.js";
 
 export const app = new Hono()
   .onError((error, c) => {
@@ -28,6 +28,6 @@ export const app = new Hono()
   })
   .get("/health", (c) => c.json({ status: "ok" }))
   .route("/chat", chatRoute)
-  .route("/writing-projects", writingProjectRoute);
+  .route("/roadmaps", roadmapRoute);
 
 export type AppType = typeof app;

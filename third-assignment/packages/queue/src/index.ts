@@ -1,9 +1,9 @@
 export {
-  WRITING_JOB_NAME,
-  WRITING_QUEUE_NAME,
-  writingJobSchema,
-  type WritingJobData,
+  ROADMAP_JOB_NAME,
+  ROADMAP_QUEUE_NAME,
+  roadmapJobSchema,
+  type RoadmapJobData,
 } from "./schema.js";
 
-export { writingQueue } from "./queue.js";
+export { roadmapQueue } from "./queue.js";
 export { connection } from "./connection.js";

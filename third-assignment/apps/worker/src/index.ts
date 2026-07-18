@@ -1,32 +1,32 @@
 import {
   connection,
-  WRITING_QUEUE_NAME,
-  writingJobSchema,
-  type WritingJobData,
+  ROADMAP_QUEUE_NAME,
+  roadmapJobSchema,
+  type RoadmapJobData,
 } from "@third-assignment/queue";
 import { Worker } from "bullmq";
-import { generateWritingBeats } from "./jobs/generate-writing-beats.js";
+import { generateRoadmap } from "./jobs/generate-roadmap.js";
 import { disconnectDatabase } from "@third-assignment/db";
 
-const worker = new Worker<WritingJobData>(
-  WRITING_QUEUE_NAME,
+const worker = new Worker<RoadmapJobData>(
+  ROADMAP_QUEUE_NAME,
   async (job) => {
-    writingJobSchema.parse(job.data);
-    await generateWritingBeats(job);
+    roadmapJobSchema.parse(job.data);
+    await generateRoadmap(job);
   },
   { connection },
 );
 
 worker.on("completed", (job) => {
-  console.log("Writing job completed:", job.id);
+  console.log("Roadmap job completed:", job.id);
 });
 
 worker.on("failed", (job, error) => {
-  console.log("Writing job failed:", job?.id, error);
+  console.error("Roadmap job failed:", job?.id, error);
 });
 
 worker.on("error", (error) => {
-  console.log("Worker error:", error);
+  console.error("Worker error:", error);
 });
 
 async function shutdown() {

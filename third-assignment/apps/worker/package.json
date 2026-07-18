@@ -13,6 +13,7 @@
     "@anvia/core": "^0.13.5",
     "@anvia/openai": "^0.3.21",
     "@t3-oss/env-core": "^0.13.11",
+    "@tavily/core": "^0.7.6",
     "@third-assignment/db": "workspace:*",
     "@third-assignment/queue": "workspace:*",
     "bullmq": "^5.80.6",

@@ -7,27 +7,34 @@ datasource db {
   provider = "postgresql"
 }
 
-enum WritingStatus {
+enum RoadmapCategory {
+  LEARNING
+  CAREER
+  EVENT
+  PROJECT
+}
+
+enum RoadmapStatus {
   QUEUED
-  GENERATING_BEATS
-  WAITING_FOR_CHOICE
+  PROCESSING
   COMPLETED
+  REJECTED
   FAILED
 }
 
-model WritingProject {
-  id               String        @id @default(cuid())
-  title            String
-  rawMaterial      String
-  prerequisites    String
-  article          String        @default("")
-  groundedConcepts Json          @default("[]")
-  candidates       Json          @default("[]")
-  status           WritingStatus @default(QUEUED)
-  revision         Int           @default(0)
-  canFinish        Boolean       @default(false)
-  generationNote   String?
-  error            String?
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+model Roadmap {
+  id               String          @id @default(cuid())
+  category         RoadmapCategory
+  goal             String
+  currentSituation String
+  targetDate       DateTime
+  constraints      String
+  status           RoadmapStatus   @default(QUEUED)
+  plan             Json?
+  result           Json?
+  sources          Json            @default("[]")
+  rejectionReason  String?
+  error             String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 }

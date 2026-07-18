@@ -1,10 +1,9 @@
 import z from "zod";
 
-export const WRITING_QUEUE_NAME = "writing-beats";
-export const WRITING_JOB_NAME = "generate-beats";
+export const ROADMAP_QUEUE_NAME = "roadmaps";
+export const ROADMAP_JOB_NAME = "generate-roadmap";
 
-export const writingJobSchema = z.object({
-  projectId: z.string().min(1),
-  revision: z.number().int().nonnegative(),
+export const roadmapJobSchema = z.object({
+  roadmapId: z.string().min(1),
 });
-export type WritingJobData = z.infer<typeof writingJobSchema>;
+export type RoadmapJobData = z.infer<typeof roadmapJobSchema>;
