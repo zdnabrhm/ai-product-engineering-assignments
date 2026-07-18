@@ -1,9 +1,19 @@
 import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
 import { env } from "./env.js";
 import { cors } from "hono/cors";
 import { chatRoute } from "./modules/chat/route.js";
+import { writingProjectRoute } from "./modules/writing/route.js";
 
 export const app = new Hono()
+  .onError((error, c) => {
+    if (error instanceof HTTPException) {
+      return c.json({ error: error.message }, error.status);
+    }
+
+    console.error(error);
+    return c.json({ error: "Internal server error." }, 500);
+  })
   .use(
     "*",
     cors({
@@ -17,4 +27,7 @@ export const app = new Hono()
     });
   })
   .get("/health", (c) => c.json({ status: "ok" }))
-  .route("/chat", chatRoute);
+  .route("/chat", chatRoute)
+  .route("/writing-projects", writingProjectRoute);
+
+export type AppType = typeof app;

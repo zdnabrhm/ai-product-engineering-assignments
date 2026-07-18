@@ -1,9 +1,10 @@
 import z from "zod";
 
-export const TASK_QUEUE_NAME = "background-tasks";
-export const TASK_JOB_NAME = "example-task";
+export const WRITING_QUEUE_NAME = "writing-beats";
+export const WRITING_JOB_NAME = "generate-beats";
 
-export const taskJobSchema = z.object({
-  resourceId: z.string().min(1),
+export const writingJobSchema = z.object({
+  projectId: z.string().min(1),
+  revision: z.number().int().nonnegative(),
 });
-export type TaskJobData = z.infer<typeof taskJobSchema>;
+export type WritingJobData = z.infer<typeof writingJobSchema>;

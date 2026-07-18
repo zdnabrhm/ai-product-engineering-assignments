@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.node.json",
   "compilerOptions": {
-    "noEmit": true
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "declaration": true
   },
-  "include": ["src/**/*.ts", "src/env.ts", "prisma.config.ts"]
+  "include": ["src/**/*.ts"]
 }

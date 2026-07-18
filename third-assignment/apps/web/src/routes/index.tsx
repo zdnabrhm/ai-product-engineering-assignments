@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ChatPage } from "@/modules/chat/components/chat-page";
+import { CreateWritingProjectPage } from "@/modules/writing/components/create-writing-project-page";
 
 export const Route = createFileRoute("/")({
-  component: ChatPage,
+  component: CreateWritingProjectPage,
 });

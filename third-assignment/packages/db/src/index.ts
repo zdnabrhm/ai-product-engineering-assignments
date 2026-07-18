@@ -1,2 +1,3 @@
 export { disconnectDatabase, prisma } from "./client.js";
 export * from "./generated/prisma/client.js";
+export * from "./schema.js";

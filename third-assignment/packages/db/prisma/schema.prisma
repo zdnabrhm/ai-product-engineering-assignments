@@ -6,3 +6,28 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum WritingStatus {
+  QUEUED
+  GENERATING_BEATS
+  WAITING_FOR_CHOICE
+  COMPLETED
+  FAILED
+}
+
+model WritingProject {
+  id               String        @id @default(cuid())
+  title            String
+  rawMaterial      String
+  prerequisites    String
+  article          String        @default("")
+  groundedConcepts Json          @default("[]")
+  candidates       Json          @default("[]")
+  status           WritingStatus @default(QUEUED)
+  revision         Int           @default(0)
+  canFinish        Boolean       @default(false)
+  generationNote   String?
+  error            String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}

@@ -5,16 +5,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./src/schema.ts",
-      "import": "./dist/schema.js"
-    },
-    "./connection": {
-      "types": "./src/connection.ts",
-      "import": "./dist/connection.js"
-    },
-    "./queue": {
-      "types": "./src/queue.ts",
-      "import": "./dist/queue.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     }
   },
   "scripts": {
@@ -23,7 +15,7 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.11",
-    "bullmq": "^5.80.2",
+    "bullmq": "^5.80.6",
     "zod": "^4.4.3"
   },
   "devDependencies": {
