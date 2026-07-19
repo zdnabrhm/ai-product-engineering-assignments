@@ -30,7 +30,6 @@ model Roadmap {
   targetDate       DateTime
   constraints      String
   status           RoadmapStatus   @default(QUEUED)
-  plan             Json?
   result           Json?
   sources          Json            @default("[]")
   rejectionReason  String?

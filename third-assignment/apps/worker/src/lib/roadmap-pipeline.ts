@@ -1,10 +1,8 @@
 import { createParsedCompletion } from "@anvia/core";
 import {
-  roadmapPlanSchema,
   roadmapResultSchema,
   roadmapScopeSchema,
   roadmapSourcesSchema,
-  type RoadmapPlan,
   type RoadmapResult,
   type RoadmapSource,
 } from "@third-assignment/db";
@@ -24,7 +22,6 @@ type PipelineResult =
   | { status: "rejected"; reason: string }
   | {
       status: "completed";
-      plan: RoadmapPlan;
       result: RoadmapResult;
       sources: RoadmapSource[];
     };
@@ -42,24 +39,17 @@ const SCOPE_INSTRUCTIONS = `
   explain why and return no queries. Do not answer the goal itself.
 `;
 
-const PLAN_INSTRUCTIONS = `
-  Create a research-grounded milestone skeleton for the supplied goal.
-  Return 3 to 5 milestones in chronological order. Give each milestone a stable
-  ID (M1, M2, ...). Every milestone must cite at least one supplied source ID.
-  Use only facts supported by the supplied source snippets. Do not invent URLs,
-  source IDs, credentials, guarantees, or personal facts.
+const GENERATE_INSTRUCTIONS = `
+  Create a research-grounded, actionable roadmap for the supplied goal. Return
+  3 to 5 milestones in chronological order with sequential IDs (M1, M2, ...).
+  Every milestone must cite at least one supplied source ID and include ISO
+  calendar start and end dates plus 2 to 5 concrete tasks with measurable
+  success criteria. Dates must start no earlier than today and end no later than
+  the target date. Use only facts supported by the supplied source snippets. Do
+  not invent URLs, source IDs, credentials, guarantees, or personal facts.
 `;
 
-const EXECUTE_INSTRUCTIONS = `
-  Expand the supplied milestone plan into an actionable roadmap. Preserve every
-  milestone ID, title, objective, order, and sourceIds exactly. Add ISO calendar
-  start and end dates plus 2 to 5 concrete tasks with measurable success
-  criteria. Dates must be chronological, start no earlier than today, and end
-  no later than the target date. Do not add or remove milestones and do not
-  introduce claims unsupported by the supplied research.
-`;
-
-function dateOnly(date: Date): string {
+function toIsoDate(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
@@ -103,37 +93,21 @@ async function research(queries: string[]): Promise<RoadmapSource[]> {
   return roadmapSourcesSchema.parse(sources);
 }
 
-function assertKnownSourceIds(plan: RoadmapPlan, sources: RoadmapSource[]): void {
+function assertValidMilestones(result: RoadmapResult, sources: RoadmapSource[]): void {
   const knownIds = new Set(sources.map((source) => source.id));
-  for (const milestone of plan.milestones) {
+  for (const [index, milestone] of result.milestones.entries()) {
+    if (milestone.id !== `M${index + 1}`) {
+      throw new Error(`Milestone ${index + 1} must use ID M${index + 1}.`);
+    }
     if (milestone.sourceIds.some((sourceId) => !knownIds.has(sourceId))) {
       throw new Error(`Milestone ${milestone.id} cites an unknown source.`);
     }
   }
 }
 
-function assertExecutionMatchesPlan(plan: RoadmapPlan, result: RoadmapResult): void {
-  if (result.milestones.length !== plan.milestones.length) {
-    throw new Error("Executed roadmap changed the milestone count.");
-  }
-
-  for (const [index, planned] of plan.milestones.entries()) {
-    const executed = result.milestones[index];
-    if (
-      !executed ||
-      executed.id !== planned.id ||
-      executed.title !== planned.title ||
-      executed.objective !== planned.objective ||
-      executed.sourceIds.join("|") !== planned.sourceIds.join("|")
-    ) {
-      throw new Error(`Executed milestone ${index + 1} does not match the plan.`);
-    }
-  }
-}
-
 function assertValidDates(result: RoadmapResult, targetDate: Date, today: Date): void {
-  const earliest = dateOnly(today);
-  const latest = dateOnly(targetDate);
+  const earliest = toIsoDate(today);
+  const latest = toIsoDate(targetDate);
   let previousEnd = earliest;
 
   for (const milestone of result.milestones) {
@@ -153,9 +127,9 @@ export async function runRoadmapPipeline(input: RoadmapInput): Promise<PipelineR
     category: input.category,
     goal: input.goal,
     currentSituation: input.currentSituation,
-    targetDate: dateOnly(input.targetDate),
+    targetDate: toIsoDate(input.targetDate),
     constraints: input.constraints,
-    today: dateOnly(today),
+    today: toIsoDate(today),
   };
 
   const scope = await createParsedCompletion(model, {
@@ -181,22 +155,14 @@ export async function runRoadmapPipeline(input: RoadmapInput): Promise<PipelineR
     throw new Error("Research returned no usable sources.");
   }
 
-  const planResponse = await createParsedCompletion(model, {
-    instructions: PLAN_INSTRUCTIONS,
-    input: JSON.stringify({ ...commonContext, sources }),
-    schema: roadmapPlanSchema,
-  });
-  const plan = roadmapPlanSchema.parse(planResponse.data);
-  assertKnownSourceIds(plan, sources);
-
   const resultResponse = await createParsedCompletion(model, {
-    instructions: EXECUTE_INSTRUCTIONS,
-    input: JSON.stringify({ ...commonContext, plan, sources }),
+    instructions: GENERATE_INSTRUCTIONS,
+    input: JSON.stringify({ ...commonContext, sources }),
     schema: roadmapResultSchema,
   });
   const result = roadmapResultSchema.parse(resultResponse.data);
-  assertExecutionMatchesPlan(plan, result);
+  assertValidMilestones(result, sources);
   assertValidDates(result, input.targetDate, today);
 
-  return { status: "completed", plan, result, sources };
+  return { status: "completed", result, sources };
 }

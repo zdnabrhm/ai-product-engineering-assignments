@@ -48,7 +48,6 @@ export async function generateRoadmap(job: Job<RoadmapJobData>): Promise<void> {
       where: { id: roadmapId, status: "PROCESSING" },
       data: {
         status: "COMPLETED",
-        plan: outcome.plan,
         result: outcome.result,
         sources: outcome.sources,
       },

@@ -51,10 +51,9 @@ export function ChatComposer({
               selector={(state) => ({
                 canSubmit: state.canSubmit,
                 isSubmitting: state.isSubmitting,
-                prompt: state.values.prompt,
               })}
             >
-              {({ canSubmit, isSubmitting, prompt }) => {
+              {({ canSubmit, isSubmitting }) => {
                 const isDisabled = isSubmitting || isStreaming;
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
@@ -94,7 +93,7 @@ export function ChatComposer({
                           type="submit"
                           variant="default"
                           size="icon-sm"
-                          disabled={!canSubmit || !prompt.trim() || isDisabled}
+                          disabled={!canSubmit || !field.state.value.trim() || isDisabled}
                         >
                           {isDisabled ? <Spinner /> : <IconArrowUp />}
 

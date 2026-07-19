@@ -1,6 +1,5 @@
 import {
   prisma,
-  roadmapPlanSchema,
   roadmapResultSchema,
   roadmapSourcesSchema,
   type Roadmap,
@@ -56,7 +55,6 @@ function serializeRoadmap(roadmap: Roadmap) {
     targetDate: roadmap.targetDate.toISOString().slice(0, 10),
     constraints: roadmap.constraints,
     status: roadmap.status,
-    plan: roadmap.plan === null ? null : roadmapPlanSchema.parse(roadmap.plan),
     result: roadmap.result === null ? null : roadmapResultSchema.parse(roadmap.result),
     sources: roadmapSourcesSchema.parse(roadmap.sources),
     rejectionReason: roadmap.rejectionReason,
@@ -70,7 +68,6 @@ export async function createRoadmap(input: CreateRoadmapInput) {
   const roadmap = await prisma.roadmap.create({
     data: {
       ...input,
-      targetDate: new Date(`${input.targetDate}T00:00:00.000Z`),
       sources: [],
     },
   });
