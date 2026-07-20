@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "endOfLine": "lf",
+  "tabWidth": 2,
+  "printWidth": 100,
+  "ignorePatterns": [
+    "dist/",
+    "node_modules/",
+    ".turbo/",
+    "coverage/",
+    "apps/app/src/routeTree.gen.ts",
+    "pnpm-lock.yaml",
+    ".pnpm-store/"
+  ],
+  "sortTailwindcss": {
+    "stylesheet": "packages/ui/src/styles/globals.css",
+    "functions": ["cn", "cva"]
+  }
+}
